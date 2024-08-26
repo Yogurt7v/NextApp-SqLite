@@ -19,5 +19,7 @@ type Participation = {
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<Data>) {
     const users = await prisma.user.findMany();
+    console.log(users);
+
     res.status(200).json(users);
 }
