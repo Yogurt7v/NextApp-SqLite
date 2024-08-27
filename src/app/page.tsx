@@ -1,6 +1,6 @@
 "use client"
 import Image from "next/image";
-import prisma from "@/server/db";
+import prisma from "../server/db";
 import { useState, useEffect } from "react";
 
 export default function Home() {
