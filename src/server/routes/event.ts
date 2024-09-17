@@ -64,9 +64,11 @@ export const eventRouter = router({
                 },
                 data: {
                     ...input,
+                    authorId: user.id,
                 },
             });
         }),
+
     join: procedure
         .input(JoinEventSchema)
         .use(isAuth)

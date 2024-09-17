@@ -1,20 +1,22 @@
-import { CreateEventForm } from "@/features/create-event";
-import { trpc } from "@/shared/api";
+import { EditEventSchema, trpc } from "@/shared/api";
 import { useRouter } from "next/router";
-import { EditEventSchema } from "@/shared/api";
+import EditFormComponent from "./edit/[id]";
+
 
 export default function EditEvent() {
     const router = useRouter();
 
     const { mutate } = trpc.event.edit.useMutation({
         onSuccess: (data) => {
-            router.push(`/events/edit/${data.id}`);
+            router.push(`/events/${data.id}`);
         },
     });
 
-    const handleSubmit = (data: any) => {
-        mutate(data);
+    const handleSubmit = (data: EditEventSchema) => {
+        console.log(data);
+
+        // mutate(data);
     };
 
-    return <CreateEventForm onSubmit={handleSubmit} />;
+    return <EditFormComponent onSubmit={handleSubmit} />;
 }
