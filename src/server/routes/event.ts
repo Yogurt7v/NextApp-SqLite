@@ -63,7 +63,9 @@ export const eventRouter = router({
                     id: input.id,
                 },
                 data: {
-                    ...input,
+                    title: input.title,
+                    description: input.description,
+                    date: input.date,
                     authorId: user.id,
                 },
             });

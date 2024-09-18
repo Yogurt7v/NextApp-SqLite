@@ -5,18 +5,25 @@ import { useForm } from "react-hook-form";
 import { trpc } from "@/shared/api";
 
 
-type EditEventFormProps = {
-    onSubmit: (data: EditEventSchema) => void;
-};
+// type EditEventFormProps = {
+//     onSubmit: (data: EditEventSchema) => void;
+// };
 
 
-export const EditFormComponent = ({ onSubmit }: EditEventFormProps) => {
+export const EditFormComponent = () => {
 
     const router = useRouter();
     const id = Number(router.query.id);
     const { data, isLoading } = trpc.event.findUnique.useQuery({
         id: id,
     })
+
+    const { mutate } = trpc.event.edit.useMutation({
+        onSuccess: (data) => {
+            router.push(`/events/${data.id}`);
+        },
+    });
+
     const {
         register,
         handleSubmit,
@@ -32,17 +39,15 @@ export const EditFormComponent = ({ onSubmit }: EditEventFormProps) => {
         mode: "onChange",
     })
 
-    const updateForm = () => {
-        let a = getValues();
-        console.log(a);
-
-        // onSubmit(data);
-
-    }x
-
+    const checkButton = (e: Event) => {
+        e.preventDefault();
+        console.log("lets mutete", getValues());
+        let newData = getValues();
+        mutate({ ...newData, id: id });
+    }
 
     return (
-        <form onSubmit={handleSubmit(updateForm)}>
+        <form onSubmit={checkButton}>
             <div className="space-y-12">
                 <div>
                     <h2 className="text-base font-semibold leading-7 text-gray-900">
