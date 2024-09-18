@@ -5,10 +5,6 @@ import { useForm } from "react-hook-form";
 import { trpc } from "@/shared/api";
 
 
-// type EditEventFormProps = {
-//     onSubmit: (data: EditEventSchema) => void;
-// };
-
 
 export const EditFormComponent = () => {
 
@@ -39,15 +35,14 @@ export const EditFormComponent = () => {
         mode: "onChange",
     })
 
-    const checkButton = (e: Event) => {
+    const mutateButton = async (e: React.FormEvent) => {
         e.preventDefault();
-        console.log("lets mutete", getValues());
         let newData = getValues();
         mutate({ ...newData, id: id });
     }
 
     return (
-        <form onSubmit={checkButton}>
+        <form onSubmit={mutateButton}>
             <div className="space-y-12">
                 <div>
                     <h2 className="text-base font-semibold leading-7 text-gray-900">

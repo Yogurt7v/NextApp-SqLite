@@ -19,5 +19,4 @@ export default function EditEvent() {
     };
 
     return <EditFormComponent onSubmit={handleSubmit} />;
-
 }
