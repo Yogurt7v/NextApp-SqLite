@@ -1,9 +1,9 @@
-import { RouterOutput } from "@/shared/api";
-import Link from "next/link";
-import { useRouter } from "next/router";
-import { useSession } from "next-auth/react";
+import { RouterOutput } from '@/shared/api';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { useSession } from 'next-auth/react';
 
-type EventDetailProps = NonNullable<RouterOutput["event"]["findUnique"]>;
+type EventDetailProps = NonNullable<RouterOutput['event']['findUnique']>;
 
 export const EventDetail = ({
   title,
@@ -12,60 +12,84 @@ export const EventDetail = ({
   participations,
   authorId,
 }: EventDetailProps) => {
-
   const { query } = useRouter();
   const id = Number(query.id);
 
   const { data: session } = useSession();
-  const isAuthor = authorId === session?.user?.id
-
-
+  const isAuthor = authorId === session?.user?.id;
 
   return (
-    <div>
-      <div className="sm:flex sm:items-center sm:justify-between ">
-        <div className="px-4 sm:px-0">
-          <h3 className="text-base font-semibold leading-7 text-gray-900">
-            Информация о событии
-          </h3>
+    <div className="card p-8">
+      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-8">
+        <div>
+          <h1 className="text-3xl font-bold  mb-2">{title}</h1>
+          <p className="text-gray-600 text-lg">Информация о мероприятии</p>
         </div>
-        {isAuthor && <Link href={`/events/edit/${id}`} className="bg-blue-500 hover:bg-blue-700 text-white font-medium  py-2 px-4 rounded">Редактировать событие</Link>}
+        {isAuthor && (
+          <Link href={`/events/edit/${id}`} className="btn-primary mt-4 lg:mt-0">
+            Редактировать событие
+          </Link>
+        )}
       </div>
-      <div className="mt-6 border-t border-gray-100">
-        <dl className="divide-y divide-gray-100">
-          <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-            <dt className="text-sm font-medium leading-6 text-gray-900">
-              Название
-            </dt>
-            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-              {title}
-            </dd>
-          </div>
-          <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-            <dt className="text-sm font-medium leading-6 text-gray-900">
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="space-y-6">
+          <div>
+            <h3 className="text-lg font-semibold text-primary-800 mb-3 flex items-center">
+              <span className="w-2 h-2 bg-primary-500 rounded-full mr-3"></span>
               Описание
-            </dt>
-            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+            </h3>
+            <p className="text-gray-700 leading-relaxed bg-gray-50 p-4 rounded-lg">
               {description}
-            </dd>
+            </p>
           </div>
-          <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-            <dt className="text-sm font-medium leading-6 text-gray-900">
+
+          <div>
+            <h3 className="text-lg font-semibold text-primary-800 mb-3 flex items-center">
+              <span className="w-2 h-2 bg-accent-500 rounded-full mr-3"></span>
               Дата проведения
-            </dt>
-            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-              {date.toLocaleDateString()}
-            </dd>
+            </h3>
+            <div className="flex items-center space-x-3">
+              <div className="w-10 h-10 bg-accent-100 rounded-full flex items-center justify-center">
+                📅
+              </div>
+              <p className="text-gray-700 font-medium">
+                {date.toLocaleDateString('ru-RU', {
+                  weekday: 'long',
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric',
+                })}
+              </p>
+            </div>
           </div>
-          <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-            <dt className="text-sm font-medium leading-6 text-gray-900">
-              Участники
-            </dt>
-            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-              {participations.map(({ user }) => user.name).join(", ")}
-            </dd>
-          </div>
-        </dl>
+        </div>
+
+        <div>
+          <h3 className="text-lg font-semibold text-primary-800 mb-3 flex items-center">
+            <span className="w-2 h-2 bg-accent-500 rounded-full mr-3"></span>
+            Участники
+          </h3>
+          {participations.length > 0 ? (
+            <div className="space-y-3">
+              {participations.map(({ user }) => (
+                <div
+                  key={user.name}
+                  className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg"
+                >
+                  <div className="w-8 h-8 bg-primary-200 rounded-full flex items-center justify-center text-primary-700 font-medium">
+                    {user.name.charAt(0).toUpperCase()}
+                  </div>
+                  <span className="text-gray-700 font-medium">{user.name}</span>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-gray-500 italic bg-gray-50 p-4 rounded-lg">
+              Пока нет участников
+            </p>
+          )}
+        </div>
       </div>
     </div>
   );

@@ -1,33 +1,40 @@
-import Link from "next/link";
-import logo from "../../../../public/Logo.svg";
-import left from "../../../../public/arrow-left.svg"
-import Image from "next/image";
+import Link from 'next/link';
+import logo from '../../../../public/Logo.svg';
+import left from '../../../../public/arrow-left.svg';
+import Image from 'next/image';
 
 export interface HeaderProps {
   session: {
-    expires: string,
+    expires: string;
     user: {
-      email: string,
-      id: number,
-      name: string
-    }
-  }
+      email: string;
+      id: number;
+      name: string;
+    };
+  };
 }
 
 export default function Header({ session }: HeaderProps) {
-
-  return (<div className="flex justify-between p-4 items-center mb-4">
-    <Link href="/">
-      <Image src={logo} alt="logo" />
-    </Link>
-    <div className="flex space-x-4 ">
-      {session?.user ?
-        <div className="flex space-x-4 items-center">
-          <div>{session?.user?.name}</div>
-          <Image src={left} alt="left" className="w-4 opacity-60" />
-          <Link href="/events/create" className="bg-green-500 hover:bg-green-700 text-white  py-2 px-4 rounded"> Создать событие</Link>
-        </div>
-        : <Link href="/api/auth/signin">Войти</Link>}
+  return (
+    <div className="flex justify-between items-center p-6 mb-8">
+      <Link href="/" className="transition-transform duration-300 hover:scale-105">
+        <Image src={logo} alt="logo" className="h-10 w-auto" />
+      </Link>
+      <div className="flex items-center space-x-4">
+        {session?.user ? (
+          <div className="flex items-center space-x-4">
+            <div className="text-primary-800 font-medium">{session.user.name}</div>
+            <Image src={left} alt="left" className="w-4 opacity-60 rotate-180" />
+            <Link href="/events/create" className="btn-primary text-sm">
+              Создать событие
+            </Link>
+          </div>
+        ) : (
+          <Link href="/api/auth/signin" className="btn-secondary text-sm">
+            Войти
+          </Link>
+        )}
+      </div>
     </div>
-  </div>)
+  );
 }

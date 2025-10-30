@@ -1,28 +1,25 @@
-import { trpc } from "@/shared/api";
+import { trpc } from '@/shared/api';
 
 type LeaveEventButtonProps = {
-    eventId: number;
-    onSuccess?: () => void;
-    children?: React.ReactNode;
+  eventId: number;
+  onSuccess?: () => void;
+  children?: React.ReactNode;
 };
 
 export const LeaveEventButton = ({
-    eventId,
-    onSuccess,
-    children,
+  eventId,
+  onSuccess,
+  children,
 }: LeaveEventButtonProps) => {
-    const { mutate } = trpc.event.leave.useMutation({ onSuccess });
+  const { mutate } = trpc.event.leave.useMutation({ onSuccess });
 
-    const handleClick = () => {
-        mutate({ id: eventId });
-    };
+  const handleClick = () => {
+    mutate({ id: eventId });
+  };
 
-    return (
-        <button
-            className="h-10 px-6 font-semibold rounded-md bg-red-600 text-white"
-            onClick={handleClick}
-        >
-            Покинуть
-        </button>
-    );
+  return (
+    <button className="btn-danger" onClick={handleClick}>
+      {children || 'Покинуть'}
+    </button>
+  );
 };
